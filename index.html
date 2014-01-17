@@ -13,15 +13,19 @@
 				overflow: hidden;
 			}
 			
-			#original-canvas{
+			canvas{
+				display: block;
 				border: 2px solid #333;
 			}
 		</style>
 	</head>
 	<body>
+		<button id="generate-btn">generate</button>
 		<canvas id="original-canvas" width="150" height="150"></canvas>
 		
+		<script src="js/snap.svg.js"></script>
 		<script src="js/FileSaver.js"></script>
+		<script src="js/Swatch.js"></script>
 		<script src="js/main.js"></script>
 		
 	</body>
