@@ -22,6 +22,31 @@ function resetCanvas() {
 	originalCanvasCTX.fillText('drag image here.', originalCanvas.width / 2 - 40, originalCanvas.height / 2);
 }
 
+function collectPixels() {
+	var i,
+		_r,
+		_g,
+		_b,
+		_a,
+		imgdata,
+		px,
+		pixelCollection = [];
+	
+	imgdata = originalCanvasCTX.getImageData(0, 0, originalCanvas.width, originalCanvas.height);
+	px = imgdata.data;
+	
+	for (i = 0; i < px.length; i += 4) {
+		
+		_r = 255 - px[i];
+		_g = 255 - px[i + 1];
+		_b = 255 - px[i + 2];
+		_a = 255 - px[i + 3];
+		
+		for (j = 0; j < pixelCollection.length; j += 1) {
+			
+		}
+	}
+}
 
 function handle_DRAG_OVER(e) {
 	e.preventDefault();
@@ -53,4 +78,6 @@ function handle_MODEL_LOAD(e) {
 
 	originalCanvasCTX.clearRect(0, 0, originalCanvas.width, originalCanvas.height);
 	originalCanvasCTX.drawImage(img, 0, 0);
+	
+	collectPixels();
 }
