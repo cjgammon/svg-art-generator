@@ -1,7 +1,9 @@
 
-var generateBtn,
+var saveBtn,
+	generateBtn,
 	originalCanvas,
 	originalCanvasCTX,
+	PIXEL_SIZE = 50,
 	swatches = [],
 	svg_count = 0,
 	svg_loaded = [];
@@ -9,6 +11,7 @@ var generateBtn,
 init();
 
 function init() {
+	saveBtn = document.getElementById('save-btn');
 	generateBtn = document.getElementById('generate-btn');
 	originalCanvas = document.getElementById('original-canvas');
 	originalCanvasCTX = originalCanvas.getContext('2d');
@@ -89,7 +92,7 @@ function init() {
 			_r, _g, _b, _a,
 			colorString,
 			svgElement,
-			_w = 50,
+			_w = PIXEL_SIZE,
 			group,
 			content,
 			matrix;
@@ -97,7 +100,7 @@ function init() {
 		imgData = originalCanvasCTX.getImageData(0, 0, originalCanvas.width, originalCanvas.height);
 		px = imgData.data;
 
-		s = new Snap(10000, 10000);
+		s = new Snap(originalCanvas.width * _w, originalCanvas.height * _w);
 
 		for (i = 0; i < px.length; i += 4) {
 			_r = px[i];
@@ -182,10 +185,15 @@ function init() {
 
 		img = new Image();
 		img.src = e.target.result;
+		img.onload = function () {
 
-		originalCanvasCTX.clearRect(0, 0, originalCanvas.width, originalCanvas.height);
-		originalCanvasCTX.drawImage(img, 0, 0);
+			originalCanvasCTX.clearRect(0, 0, originalCanvas.width, originalCanvas.height);
+			originalCanvas.width = img.width;
+			originalCanvas.height = img.height;
+			originalCanvasCTX.drawImage(img, 0, 0);
 
-		collectPixels();
+			collectPixels();
+		}
+
 	}
 }

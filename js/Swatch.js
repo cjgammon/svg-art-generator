@@ -4,7 +4,7 @@ var Swatch = function (color) {
 	var instance = this,
 		canvas,
 		ctx,
-		WIDTH = 50;
+		WIDTH = PIXEL_SIZE;
 	
 	instance.loaded = false;
 	instance.color = color;
@@ -16,7 +16,7 @@ var Swatch = function (color) {
 	canvas.height = WIDTH;
 	canvas.width = WIDTH * 2;
 	ctx = canvas.getContext('2d');
-	document.body.appendChild(canvas);
+	document.getElementById('ui').appendChild(canvas);
 	
 	canvas.addEventListener('dragover', handle_DRAG_OVER);
 	canvas.addEventListener('dragenter', handle_DRAG_ENTER);
