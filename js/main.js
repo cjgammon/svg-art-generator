@@ -93,6 +93,7 @@ function init() {
 			colorString,
 			svgElement,
 			_w = PIXEL_SIZE,
+			random,
 			group,
 			content,
 			matrix;
@@ -116,7 +117,9 @@ function init() {
 					matrix = new Snap.Matrix();
 					matrix.translate(_x * _w, _y * _w);
 					
-					svgElement = swatches[j].svgList[0];
+					random = Math.floor(Math.random() * swatches[j].svgList.length);
+										
+					svgElement = swatches[j].svgList[random];
 					content = svgElement.select('g').clone();
 					content.transform(matrix.toTransformString());
 					s.append(content);

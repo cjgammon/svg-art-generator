@@ -26,23 +26,17 @@ var Swatch = function (color) {
 	instance.load = function (callback) {
 		
 		var svg_loaded = 0,
-			i,
-			snap_element,
-			svg_element;
+			i;
 		
 		svgList = [];
 		
 		function handle_svg_LOAD(e) {
 			svg_loaded += 1;
-			
-			//svg_element = document.body.appendChild(e.node);
-			//snap_element = e;
 			instance.svgList.push(e);
 			
 			if (svg_loaded == instance.list.length) {
 				callback();
 			}
-		
 		}
 		
 		for (i = 0; i < instance.list.length; i += 1) {
@@ -55,7 +49,10 @@ var Swatch = function (color) {
 		var i;
 		
 		ctx.clearRect(0, 0, canvas.width, canvas.height);
-				
+		
+		canvas.width = (instance.list.length + 1) * WIDTH;
+		console.log(canvas.width, 'ok');
+		
 		ctx.beginPath();
 		ctx.fillStyle = instance.colorString;
 		ctx.fillRect(0, 0, WIDTH, WIDTH);
