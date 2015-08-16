@@ -10,3 +10,6 @@ You will then see the color palette generated beneath.
 Drag SVG squares (50px x 50px) onto these color palettes to map them to this pixel, you can drag as many as you like.
 
 Click Generate to build it based on the pixel mapping.
+
+##shortcuts
+H – hide UI

@@ -8,6 +8,7 @@ var saveBtn,
 	svg_count = 0,
 	svg_loaded = [],
     latest_image = null,
+    ui = document.getElementById('ui'),
     msg = document.getElementById('message');
 
 //prevent load on missed drag and drop
@@ -20,6 +21,21 @@ window.addEventListener("drop",function(e){
   e.preventDefault();
 },false);
 
+
+document.body.addEventListener('keydown', function (e) {
+    console.log(e.keyCode);
+    switch (e.keyCode) {
+        case 72: //H
+            if (ui.style.display !== 'none') {
+                ui.style.display = 'none';
+            } else {
+                ui.style.display = 'block';
+            }
+        break;
+        default:
+        break;
+    }
+});
 
 
 init();
