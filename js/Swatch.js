@@ -9,7 +9,7 @@ var Swatch = function (color) {
 	instance.loaded = false;
 	instance.color = color;
 	instance.colorString = 'rgba(' + color.r + ', ' + color.g + ', ' + color.b + ', ' + color.a + ')';
-	instance.svgList = []
+	instance.svgList = [];
 	instance.list = [];
 	
 	canvas = document.createElement('canvas');
@@ -43,7 +43,7 @@ var Swatch = function (color) {
 			Snap.load(instance.list[i].src, handle_svg_LOAD);
 		}
 		
-	}
+	};
 	
 	instance.draw = function () {
 		var i;
@@ -61,7 +61,11 @@ var Swatch = function (color) {
 		for (i = 0; i < instance.list.length; i += 1) {
 			ctx.drawImage(instance.list[i], (i + 1) * WIDTH, 0);
 		}
-	}
+	};
+
+    instance.destroy = function () {
+        document.getElementById('ui').removeChild(canvas);
+    };
 	
 	function handle_DRAG_OVER(e) {
 		e.preventDefault();

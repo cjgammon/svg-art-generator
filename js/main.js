@@ -6,7 +6,21 @@ var saveBtn,
 	PIXEL_SIZE = 50,
 	swatches = [],
 	svg_count = 0,
-	svg_loaded = [];
+	svg_loaded = [],
+    latest_image = null,
+    msg = document.getElementById('message');
+
+//prevent load on missed drag and drop
+window.addEventListener("dragover",function(e){
+  e = e || event;
+  e.preventDefault();
+},false);
+window.addEventListener("drop",function(e){
+  e = e || event;
+  e.preventDefault();
+},false);
+
+
 
 init();
 
@@ -29,7 +43,7 @@ function init() {
 		originalCanvasCTX.clearRect(0, 0, originalCanvas.width, originalCanvas.height);
 		originalCanvasCTX.fillStyle = 'black';
 		originalCanvasCTX.font = '10pt Calibri';
-		originalCanvasCTX.fillText('drag image here.', originalCanvas.width / 2 - 40, originalCanvas.height / 2);
+		originalCanvasCTX.fillText('drag image here.', originalCanvas.width / 2 - 45, originalCanvas.height / 2);
 	}
 
 	function collectPixels() {	
@@ -75,6 +89,11 @@ function init() {
 		var i,
 			swatch;
 
+        for (i = 0; i < swatches.length; i += 1) {
+            swatches[i].destroy();
+        }
+        swatches = [];
+
 		for (i = 0; i < collection.length; i += 1) {
 			swatch = new Swatch(collection[i]);
 			swatches.push(swatch);
@@ -97,6 +116,8 @@ function init() {
 			group,
 			content,
 			matrix;
+
+        msg.innerText = 'generating...';
 
 		imgData = originalCanvasCTX.getImageData(0, 0, originalCanvas.width, originalCanvas.height);
 		px = imgData.data;
@@ -133,6 +154,8 @@ function init() {
 				}
 			}			
 		}
+        
+        msg.className = '';
 	}
 
 	function handle_generate_CLICK(e) {
@@ -142,6 +165,9 @@ function init() {
 		svg_loaded = [];
 		svg_count = 0;
 		
+        msg.className = 'show';
+        msg.innerText = 'loading swatches';
+
 		for (i = 0; i < swatches.length; i += 1) {
 			swatches[i].load(handle_svg_LOAD);		
 		}
@@ -149,10 +175,14 @@ function init() {
 	
 	function handle_svg_LOAD(e) {
 		svg_count += 1;
-		
+
 		if (swatches.length == svg_count) {
-			generate()
-		}
+            msg.innerText = 'generating';
+
+            setTimeout(generate, 100);
+		} else {
+            msg.innerText = 'loading swatches ' + svg_count;
+        }
 	}
 	
 	function handle_DRAG_OVER(e) {
@@ -171,7 +201,11 @@ function init() {
 
 	function handle_DRAG_LEAVE(e) {
 		console.log('drag leave');
-		resetCanvas();
+        if (!latest_image) {
+		    resetCanvas();
+        } else {
+            drawImage(latest_image);
+        }
 	}
 
 	function handle_DROP(e) {
@@ -190,13 +224,19 @@ function init() {
 		img.src = e.target.result;
 		img.onload = function () {
 
-			originalCanvasCTX.clearRect(0, 0, originalCanvas.width, originalCanvas.height);
-			originalCanvas.width = img.width;
-			originalCanvas.height = img.height;
-			originalCanvasCTX.drawImage(img, 0, 0);
+            latest_image = img;
 
+            drawImage(img);
+			
 			collectPixels();
-		}
+		};
 
 	}
+
+    function drawImage(img) {
+        originalCanvasCTX.clearRect(0, 0, originalCanvas.width, originalCanvas.height);
+        originalCanvas.width = img.width;
+        originalCanvas.height = img.height;
+        originalCanvasCTX.drawImage(img, 0, 0);
+    }
 }
