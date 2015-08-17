@@ -1,5 +1,6 @@
 
-var saveBtn,
+var s,
+    saveBtn,
 	generateBtn,
 	originalCanvas,
 	originalCanvasCTX,
@@ -8,6 +9,8 @@ var saveBtn,
 	svg_count = 0,
 	svg_loaded = [],
     latest_image = null,
+    zoom = 0.1,
+    CMD = false,
     ui = document.getElementById('ui'),
     msg = document.getElementById('message');
 
@@ -24,6 +27,7 @@ window.addEventListener("drop",function(e){
 
 document.body.addEventListener('keydown', function (e) {
     console.log(e.keyCode);
+
     switch (e.keyCode) {
         case 72: //H
             if (ui.style.display !== 'none') {
@@ -31,12 +35,55 @@ document.body.addEventListener('keydown', function (e) {
             } else {
                 ui.style.display = 'block';
             }
+
+            e.preventDefault();
+        break;
+        case 93: //CMD
+            CMD = true;
+            e.preventDefault();
+        break;
+        case 187: //+
+            if (CMD === true) {
+                zoom += 0.05; 
+                updateZoom();
+            }
+            e.preventDefault();
+        break;
+        case 189: //-
+            if (CMD === true) {
+                zoom -= 0.05;
+                updateZoom();
+            }
+            e.preventDefault();
+        break;
+        case 48:
+            if (CMD === true) {
+                zoom = 0.1;
+                updateZoom();
+            }
+            e.preventDefault();
         break;
         default:
         break;
     }
 });
 
+document.body.addEventListener('keyup', function (e) {
+
+    switch (e.keyCode) {
+        case 93:
+            CMD = false;
+        break;
+    }
+});
+
+function updateZoom() {
+    console.log('s', s);
+
+    if (s) {
+        s.node.style.transform = "scale(" + zoom + ")";
+    }
+}
 
 init();
 
@@ -122,7 +169,6 @@ function init() {
 		var imgData,
 			px,
 			i, j,
-			s,
 			_x = 0, _y = 0,
 			_r, _g, _b, _a,
 			colorString,
@@ -181,6 +227,11 @@ function init() {
 		svg_loaded = [];
 		svg_count = 0;
 		
+        if (swatches.length === 0) {
+            alert('NO COLORS SELECTED');
+            return;
+        }
+
         msg.className = 'show';
         msg.innerText = 'loading swatches';
 
